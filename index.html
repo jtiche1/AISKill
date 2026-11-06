@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Free Time Fortune</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: riso-printed sticker cards on cool paper. One stage card per question, a live trait radar beside it; results stack podium, reading, ranked deck. */
+:root{
+  --paper:#E9ECF6; --card:#FFFFFF; --ink:#1C1A33; --muted:#5D5A7C; --line:rgba(28,26,51,.14);
+  --edge:#1C1A33; --drop:#1C1A33;
+  --pink:#FF3EA5; --blue:#1769E0; --yellow:#FFD23F; --green:#16A866; --orange:#FF7A1A; --violet:#8A5CF6;
+  --on-accent:#1C1A33; --on-strong:#FFFFFF;
+  --font-display:"Bagel Fat One", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+  --font-body:"Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono:"DM Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#14132A; --card:#211F3E; --ink:#F2EFFF; --muted:#A9A5CC; --line:rgba(242,239,255,.14);
+    --edge:#F2EFFF; --drop:#FF3EA5; --blue:#4D8DFF; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14132A; --card:#211F3E; --ink:#F2EFFF; --muted:#A9A5CC; --line:rgba(242,239,255,.14);
+  --edge:#F2EFFF; --drop:#FF3EA5; --blue:#4D8DFF; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.5;
+  background-image:radial-gradient(var(--line) 1px, transparent 1.2px); background-size:18px 18px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:20px 48px; overflow-x:hidden;
+}
+button{font:inherit; color:inherit; cursor:pointer}
+button:focus-visible,.chip:focus-visible{outline:3px solid var(--blue); outline-offset:3px}
+.wrap{max-width:1080px; margin:0 auto; display:flex; flex-direction:column; gap:22px}
+.mono{font-family:var(--font-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase}
+
+/* sticker card */
+.sticker{background:var(--card); border:2.5px solid var(--edge); border-radius:var(--r); box-shadow:6px 6px 0 var(--drop)}
+.btn{
+  display:inline-flex; align-items:center; gap:10px; border:2.5px solid var(--edge); border-radius:999px;
+  padding:12px 22px; font-weight:800; background:var(--card); box-shadow:4px 4px 0 var(--drop);
+  transition:transform .12s, box-shadow .12s;
+}
+.btn:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--drop)}
+.btn:active{transform:translate(3px,3px); box-shadow:1px 1px 0 var(--drop)}
+.btn.primary{background:var(--pink); color:var(--on-accent)}
+.btn.ghost{box-shadow:none; background:transparent}
+.btn.ghost:hover{box-shadow:3px 3px 0 var(--drop)}
+.btn[disabled]{opacity:.45; pointer-events:none}
+
+/* top bar */
+.bar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap}
+.logo{font-family:var(--font-display); font-size:22px; letter-spacing:.01em; display:flex; align-items:center; gap:10px}
+.logo i{width:28px; height:28px; border-radius:50%; background:conic-gradient(var(--pink) 0 25%, var(--yellow) 0 50%, var(--blue) 0 75%, var(--green) 0); border:2.5px solid var(--edge); display:inline-block}
+
+/* ---------- intro ---------- */
+.intro{padding:clamp(24px,5vw,56px); display:grid; gap:26px; position:relative; overflow:hidden}
+.intro h1{
+  font-family:var(--font-display); font-weight:400; font-size:clamp(48px,10vw,112px); line-height:.9; margin:0;
+  letter-spacing:-.01em; text-wrap:balance; color:var(--ink);
+  text-shadow:4px 4px 0 var(--pink), -3px -2px 0 var(--yellow);
+}
+.intro p.lede{font-size:clamp(17px,2.2vw,21px); max-width:56ch; margin:0; color:var(--muted)}
+.intro .row{display:flex; gap:14px; flex-wrap:wrap; align-items:center}
+.facts{display:flex; gap:10px; flex-wrap:wrap}
+.fact{border:2px dashed var(--line); border-radius:999px; padding:6px 14px; font-weight:600; font-size:14px}
+.marquee{overflow:hidden; border-block:2.5px solid var(--edge); background:var(--yellow); color:var(--on-accent); margin-inline:calc(-1 * clamp(24px,5vw,56px))}
+.marquee .track{display:flex; gap:28px; padding:10px 0; width:max-content; animation:scroll 50s linear infinite; font-family:var(--font-display); font-size:20px; white-space:nowrap}
+.marquee .track span::after{content:"✶"; margin-left:28px; color:var(--pink)}
+.marquee.rev{background:var(--blue); color:var(--on-strong); margin-top:-26px}
+.marquee.rev .track{animation-direction:reverse; animation-duration:60s}
+.marquee.rev .track span::after{color:var(--yellow)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+.how{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px}
+.how div{border-top:2.5px solid var(--edge); padding-top:10px; font-size:15px}
+.how b{display:block; font-size:17px}
+@media (max-width:640px){.how{grid-template-columns:1fr}}
+
+/* ---------- quiz ---------- */
+.quiz{display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:22px; align-items:start}
+@media (max-width:860px){.quiz{grid-template-columns:1fr}}
+.progress{display:flex; align-items:center; gap:12px}
+.track-p{flex:1; height:14px; border:2.5px solid var(--edge); border-radius:999px; background:var(--card); overflow:hidden; position:relative}
+.track-p > span{position:absolute; inset:0 auto 0 0; background:repeating-linear-gradient(-45deg,var(--pink) 0 10px,#ff6fbd 10px 20px); transition:width .4s cubic-bezier(.3,1.4,.5,1)}
+.stage{padding:clamp(20px,4vw,40px); min-height:420px; display:flex; flex-direction:column; gap:26px; position:relative}
+.stage .kind{display:flex; justify-content:space-between; color:var(--muted)}
+.q{font-family:var(--font-display); font-weight:400; font-size:clamp(28px,4.4vw,44px); line-height:1.05; margin:0; text-wrap:balance}
+.anim-in{animation:cardIn .42s cubic-bezier(.2,1.3,.4,1) both}
+.anim-out{animation:cardOut .22s ease-in both}
+@keyframes cardIn{from{opacity:0; transform:translateY(24px) rotate(-1.5deg) scale(.97)}}
+@keyframes cardOut{to{opacity:0; transform:translateX(-40px) rotate(2deg)}}
+
+/* scale */
+.scale{display:flex; flex-direction:column; gap:12px; margin-top:auto}
+.dots{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.dot{border:2.5px solid var(--edge); border-radius:50%; background:var(--card); transition:transform .15s, background .15s; flex:none; display:grid; place-items:center; font-family:var(--font-mono); font-size:12px}
+.dot[data-v="-2"],.dot[data-v="2"]{width:72px; height:72px}
+.dot[data-v="-1"],.dot[data-v="1"]{width:56px; height:56px}
+.dot[data-v="0"]{width:42px; height:42px}
+.dot[data-v^="-"]{border-color:var(--pink)}
+.dot[data-v="1"],.dot[data-v="2"]{border-color:var(--blue)}
+.dot:hover{transform:scale(1.1)}
+.dot[data-v^="-"].on,.dot[data-v^="-"]:hover{background:var(--pink)}
+.dot[data-v="1"].on,.dot[data-v="2"].on,.dot[data-v="1"]:hover,.dot[data-v="2"]:hover{background:var(--blue)}
+.dot[data-v="0"].on,.dot[data-v="0"]:hover{background:var(--muted)}
+.dot.on{transform:scale(1.15); animation:pop .35s}
+@keyframes pop{40%{transform:scale(1.35)}}
+.ends{display:flex; justify-content:space-between; font-weight:700; font-size:14px}
+.ends span:first-child{color:var(--pink)} .ends span:last-child{color:var(--blue)}
+@media (max-width:420px){
+  .dot[data-v="-2"],.dot[data-v="2"]{width:58px; height:58px}
+  .dot[data-v="-1"],.dot[data-v="1"]{width:46px; height:46px}
+  .dot[data-v="0"]{width:34px; height:34px}
+}
+
+/* tiles */
+.tiles{display:grid; gap:14px; margin-top:auto}
+.tiles.two{grid-template-columns:1fr auto 1fr; align-items:center}
+.tiles.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tiles.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:560px){.tiles.four,.tiles.three{grid-template-columns:1fr}.tiles.two{grid-template-columns:1fr}.tiles.two .or{justify-self:center}}
+.tile{
+  text-align:left; border:2.5px solid var(--edge); border-radius:14px; padding:18px; background:var(--card);
+  box-shadow:4px 4px 0 var(--drop); display:flex; flex-direction:column; gap:6px; min-height:96px;
+  transition:transform .14s, box-shadow .14s, background .14s; position:relative; overflow:hidden;
+}
+.tile b{font-size:19px; line-height:1.2}
+.tile small{color:var(--muted); font-size:14px}
+.tile:hover{transform:translate(-2px,-3px) rotate(-.6deg); box-shadow:7px 7px 0 var(--drop)}
+.tile:nth-child(even):hover{transform:translate(-2px,-3px) rotate(.6deg)}
+.tile .key{position:absolute; top:10px; right:12px; font-family:var(--font-mono); font-size:11px; color:var(--muted); border:1.5px solid var(--line); border-radius:6px; padding:0 6px}
+.tile.on{background:var(--yellow); color:var(--on-accent)}
+.tile.on small,.tile.on .key{color:var(--on-accent)}
+.tiles.two .tile{min-height:150px; justify-content:flex-end}
+.tiles.two .tile b{font-family:var(--font-display); font-weight:400; font-size:clamp(22px,3vw,30px)}
+.or{font-family:var(--font-display); font-size:20px; width:54px; height:54px; border-radius:50%; display:grid; place-items:center; background:var(--pink); color:var(--on-accent); border:2.5px solid var(--edge); transform:rotate(-12deg)}
+.navrow{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap}
+.hint{color:var(--muted); font-size:13px}
+
+/* side panel */
+.side{padding:20px; display:flex; flex-direction:column; gap:14px; position:sticky; top:calc(env(safe-area-inset-top, 0px) + 16px)}
+@media (max-width:860px){.side{position:static}}
+.side h3{margin:0; font-size:15px}
+canvas.radar{width:100%; aspect-ratio:1; max-width:100%; display:block}
+.hunch{border-top:2px dashed var(--line); padding-top:12px; min-height:84px}
+.hunch .name{font-family:var(--font-display); font-size:24px; line-height:1.1; transition:opacity .2s}
+.hunch .sub{color:var(--muted); font-size:13px}
+
+/* ---------- shuffle ---------- */
+.shuffle{min-height:420px; display:grid; place-items:center; gap:18px; text-align:center; padding:40px}
+.deck{position:relative; width:150px; height:200px}
+.deck span{position:absolute; inset:0; border:2.5px solid var(--edge); border-radius:14px; box-shadow:4px 4px 0 var(--drop); animation:shuf .7s ease-in-out infinite alternate}
+.deck span:nth-child(1){background:var(--pink)}
+.deck span:nth-child(2){background:var(--yellow); animation-delay:.15s}
+.deck span:nth-child(3){background:var(--blue); animation-delay:.3s}
+@keyframes shuf{0%{transform:translateX(-50px) rotate(-12deg)}100%{transform:translateX(50px) rotate(12deg)}}
+.shuffle p{font-family:var(--font-display); font-size:26px; margin:0}
+
+/* ---------- results ---------- */
+.res-head{padding:clamp(20px,4vw,40px); display:grid; grid-template-columns:minmax(0,1fr) 260px; gap:24px; align-items:center}
+@media (max-width:760px){.res-head{grid-template-columns:1fr}.res-head canvas{max-width:260px; justify-self:center}}
+.res-head h2{font-family:var(--font-display); font-weight:400; font-size:clamp(34px,6vw,64px); line-height:.95; margin:0 0 12px; text-wrap:balance; text-shadow:3px 3px 0 var(--pink)}
+.traits{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 16px}
+.tchip{border:2px solid var(--edge); border-radius:999px; padding:4px 12px; font-weight:700; font-size:14px; background:var(--yellow); color:var(--on-accent)}
+.tchip:nth-child(2){background:var(--pink)} .tchip:nth-child(3){background:var(--green)}
+.res-actions{display:flex; gap:10px; flex-wrap:wrap}
+
+.podium{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; perspective:1200px}
+@media (max-width:760px){.podium{grid-template-columns:1fr}}
+.pcard{position:relative; transform-style:preserve-3d; animation:flip .8s cubic-bezier(.3,1.3,.5,1) both}
+.pcard:nth-child(2){animation-delay:.25s} .pcard:nth-child(3){animation-delay:.5s}
+@keyframes flip{from{transform:rotateY(180deg) translateY(30px); opacity:.2}}
+.pcard .inner{padding:22px; display:flex; flex-direction:column; gap:10px; height:100%}
+.rank{display:flex; justify-content:space-between; align-items:center}
+.medal{font-family:var(--font-display); font-size:20px; width:46px; height:46px; border-radius:50%; display:grid; place-items:center; border:2.5px solid var(--edge); color:var(--on-accent)}
+.pcard:nth-child(1) .medal{background:var(--yellow)} .pcard:nth-child(2) .medal{background:var(--pink)} .pcard:nth-child(3) .medal{background:var(--blue); color:var(--on-strong)}
+.pct{font-family:var(--font-display); font-size:34px; line-height:1}
+.pct small{font-size:16px}
+.pcard h3{font-family:var(--font-display); font-weight:400; font-size:28px; line-height:1.05; margin:0}
+.why{margin:0; font-size:15px}
+.step{margin:auto 0 0; font-size:14px; border-top:2px dashed var(--line); padding-top:10px}
+.step b{display:block; font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.tags{display:flex; gap:6px; flex-wrap:wrap}
+.tag{font-family:var(--font-mono); font-size:11px; border:1.5px solid var(--edge); border-radius:6px; padding:1px 7px; text-transform:uppercase; letter-spacing:.05em}
+.tag.cat{color:var(--on-accent); border-color:transparent}
+
+/* reading */
+.reading{padding:clamp(20px,3vw,30px); display:grid; gap:14px}
+.reading .top{display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap}
+.reading h3{margin:0; font-family:var(--font-display); font-weight:400; font-size:26px}
+.reading .out{white-space:pre-wrap; font-size:17px; max-width:68ch; min-height:1.5em}
+.reading .out.thinking{color:var(--muted); font-style:italic}
+.reading .note{color:var(--muted); font-size:13px}
+
+/* list */
+.listhead{display:flex; justify-content:space-between; align-items:end; gap:12px; flex-wrap:wrap}
+.listhead h3{margin:0; font-family:var(--font-display); font-weight:400; font-size:28px}
+.filters{display:flex; gap:8px; flex-wrap:wrap}
+.chip{border:2px solid var(--edge); border-radius:999px; padding:5px 14px; font-weight:700; font-size:14px; background:var(--card); transition:transform .12s}
+.chip:hover{transform:translateY(-2px)}
+.chip.on{background:var(--ink); color:var(--paper)}
+.list{display:flex; flex-direction:column; gap:10px}
+.item{background:var(--card); border:2.5px solid var(--edge); border-radius:14px; overflow:hidden; animation:cardIn .4s both}
+.item > button{width:100%; display:grid; grid-template-columns:44px minmax(0,1fr) minmax(90px,200px) 56px; gap:14px; align-items:center; padding:12px 16px; background:none; border:0; text-align:left}
+@media (max-width:560px){.item > button{grid-template-columns:36px minmax(0,1fr) 52px}.item .meter{grid-column:2 / 4}}
+.item .n{font-family:var(--font-mono); font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums}
+.item .t{font-weight:800; font-size:17px; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.item .meter{height:12px; border:2px solid var(--edge); border-radius:999px; overflow:hidden; background:var(--paper)}
+.item .meter span{display:block; height:100%; border-radius:999px}
+.item .p{font-family:var(--font-mono); font-weight:500; font-size:15px; text-align:right; font-variant-numeric:tabular-nums}
+.item .more{padding:0 16px 16px 74px; display:grid; gap:8px; font-size:15px}
+@media (max-width:560px){.item .more{padding-left:16px}}
+.dotcat{width:12px; height:12px; border-radius:50%; border:2px solid var(--edge); flex:none}
+
+.footer{color:var(--muted); font-size:13px; text-align:center}
+canvas#confetti{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:50}
+.toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom, 0px)); transform:translateX(-50%); background:var(--ink); color:var(--paper); padding:10px 18px; border-radius:999px; font-weight:700; z-index:60; transition:opacity .3s}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important; transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="bar">
+    <div class="logo"><i></i>Free Time Fortune</div>
+    <span class="mono" id="barNote">Personality → hobby matcher</span>
+  </header>
+  <main id="app"></main>
+  <p class="footer">Matches come from an 8-trait profile compared against 44 hobbies, adjusted for your budget and free time. Your answers stay in this page.</p>
+</div>
+<canvas id="confetti" hidden></canvas>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ---------------- model ---------------- */
+const T = ["soc","act","cre","out","ana","nov","com","pat"];
+const TL = {soc:"Social",act:"Active",cre:"Creative",out:"Outdoorsy",ana:"Analytical",nov:"Adventurous",com:"Competitive",pat:"Patient"};
+const TN = {soc:"Independent",act:"Easygoing",cre:"Structured",out:"Homebody",ana:"Intuitive",nov:"Steady",com:"Laid-back",pat:"Spontaneous"};
+const PHRASE = {
+  soc:["you light up around people","you guard your solo time"],
+  act:["you need to move","you like to keep things low-key"],
+  cre:["you want to make things","you like a clear structure"],
+  out:["fresh air resets you","you're happiest indoors"],
+  ana:["you love a good puzzle","you'd rather feel it than figure it out"],
+  nov:["you chase new experiences","you enjoy familiar comforts"],
+  com:["you like to win","you're not here to keep score"],
+  pat:["you can focus for hours","you like a quick payoff"]
+};
+const CATS = {Active:"var(--pink)",Outdoors:"var(--green)",Creative:"var(--yellow)",Making:"var(--orange)",Mind:"var(--blue)",Social:"var(--violet)"};
+
+// [name, category, [soc,act,cre,out,ana,nov,com,pat], cost 1-3, time 1-3, first step]
+const HOBBIES = [
+ ["Rock climbing","Active",[.3,1,0,.4,.3,.8,.4,.3],2,2,"Book an intro bouldering session. Shoes are rentable."],
+ ["Trail running","Active",[-.3,1,-.3,1,0,.3,.5,.4],1,2,"Pick a 3 km dirt loop and walk the hills. No shame."],
+ ["Hiking","Outdoors",[0,.7,0,1,0,.5,-.3,.2],1,2,"Find a 5 km trail within an hour of home."],
+ ["Surfing","Outdoors",[0,1,.2,1,0,1,.2,.4],3,3,"Take a group lesson on a soft-top board."],
+ ["Kayaking","Outdoors",[0,.8,0,1,0,.7,0,.2],2,2,"Rent a sit-on-top kayak for an hour on calm water."],
+ ["Birdwatching","Outdoors",[-.6,-.2,0,1,.5,0,-.5,1],1,1,"Get a free bird ID app and log 5 species in a park."],
+ ["Gardening","Outdoors",[-.4,.2,.5,.9,.2,-.3,-.6,.9],1,2,"Grow basil and mint on a sunny windowsill."],
+ ["Foraging","Outdoors",[-.3,.4,0,1,.6,.6,-.5,.6],1,2,"Join a guided walk before you pick anything."],
+ ["Camping","Outdoors",[.5,.5,0,1,.1,.6,-.5,.2],2,3,"Book a drive-in campsite for one night."],
+ ["Scuba diving","Outdoors",[.3,.6,0,1,.2,1,-.2,.3],3,3,"Try a pool 'discover scuba' session."],
+ ["Geocaching","Outdoors",[0,.6,0,1,.6,.8,.3,.3],1,1,"Install the app and find the nearest cache."],
+ ["Astronomy","Mind",[-.4,-.6,0,.6,1,.4,-.5,.8],2,1,"Find Saturn with a free sky-map app and binoculars."],
+ ["Photography","Creative",[-.3,.2,.9,.6,.3,.5,-.2,.5],2,1,"Shoot 20 phone photos of a single color."],
+ ["Watercolor painting","Creative",[-.6,-.7,1,0,-.2,0,-.6,.7],1,1,"Get a student pan set and paint one lemon."],
+ ["Creative writing","Creative",[-.8,-.8,1,-.3,.3,.2,-.3,.7],1,1,"Write a 100-word story tonight, start to finish."],
+ ["Learning guitar","Creative",[-.2,-.4,.8,-.3,.3,.2,0,.9],2,2,"Learn G, C and D. That unlocks hundreds of songs."],
+ ["Calligraphy","Creative",[-.6,-.8,.9,-.4,0,-.3,-.5,1],1,1,"Practice basic strokes with a brush pen."],
+ ["Journaling","Creative",[-.9,-.8,.6,-.2,.3,-.5,-.9,.6],1,1,"Write three lines before bed for a week."],
+ ["DJing","Creative",[.6,.2,.9,-.5,.4,.6,.2,.5],3,2,"Try free DJ software with your own music library."],
+ ["Upcycling thrifted clothes","Creative",[.3,.1,.9,-.3,0,.7,-.2,.4],1,1,"Thrift one shirt and alter it."],
+ ["Pottery","Making",[.2,-.2,.9,-.3,0,.2,-.5,.9],2,2,"Book a one-night wheel-throwing taster class."],
+ ["Knitting","Making",[-.2,-.8,.7,-.5,.3,-.5,-.6,1],1,1,"Knit a garter-stitch square with chunky yarn."],
+ ["Woodworking","Making",[-.4,.3,.8,-.2,.6,.1,-.4,1],3,3,"Build a simple box at a community makerspace."],
+ ["Baking bread","Making",[0,-.3,.7,-.6,.5,.1,-.3,.8],1,1,"Bake a no-knead loaf. It's hard to mess up."],
+ ["Cooking world cuisines","Making",[.4,-.2,.8,-.5,.3,.9,-.2,.4],2,1,"Pick one country and cook a dish from it this weekend."],
+ ["Fermenting & homebrewing","Making",[0,-.4,.4,-.3,.9,.4,-.3,.8],2,2,"Make a jar of sauerkraut: cabbage, salt, patience."],
+ ["Miniature painting","Making",[-.7,-.9,.8,-.6,.4,0,-.2,1],2,2,"Paint one miniature with a starter paint set."],
+ ["Board games","Mind",[.9,-.8,.1,-.5,.8,.1,.7,.3],1,1,"Visit a board game café and ask staff for a pick."],
+ ["Chess","Mind",[-.1,-.9,0,-.5,1,0,1,.8],1,1,"Play the daily puzzle on a free chess site."],
+ ["Tabletop RPGs","Mind",[1,-.8,1,-.5,.5,.6,0,.4],1,2,"Join a one-shot game night at a local game store."],
+ ["Escape rooms","Mind",[.9,0,.2,-.5,1,.8,.5,-.2],2,1,"Book a beginner room with three or four friends."],
+ ["Coding side projects","Mind",[-.6,-.9,.6,-.6,1,.4,0,.9],1,2,"Build a tiny web page that does one silly thing."],
+ ["Puzzles & crosswords","Mind",[-.6,-.9,0,-.5,.9,-.4,.2,.8],1,1,"Do one easy crossword a day for a week."],
+ ["Learning a language","Mind",[0,-.6,.2,-.3,.8,.7,.1,.9],1,2,"Do 10 minutes a day and label things around your home."],
+ ["Speedrunning games","Mind",[-.5,-.9,0,-.8,.7,.2,1,1],2,2,"Pick a game you know well and time one run."],
+ ["Yoga","Active",[-.2,.6,0,0,0,-.3,-.8,.7],1,1,"Follow a free 20-minute beginner video."],
+ ["Martial arts","Active",[.4,1,0,-.4,.2,.4,.9,.8],2,2,"Most dojos offer a free trial class. Take it."],
+ ["Pickleball","Active",[1,.8,-.2,.4,.1,0,.8,0],1,1,"Find open play at a local court. Paddles are often loaned."],
+ ["Cycling","Active",[-.2,1,0,.9,.1,.4,.3,.4],3,2,"Ride a flat 10 km route on any bike you have."],
+ ["Swimming","Active",[-.5,1,0,.2,0,-.2,.2,.5],1,1,"Swim 10 lengths at any pace, resting when you need."],
+ ["Singing in a choir","Social",[1,-.2,.6,-.4,0,0,-.2,.5],1,1,"Find a community choir with no audition."],
+ ["Improv comedy","Social",[1,.2,.9,-.5,0,1,0,-.3],1,1,"Drop into a beginner improv jam. Everyone's nervous."],
+ ["Social dancing","Social",[1,.9,.5,-.5,0,.6,.1,.3],1,1,"Go to a beginner salsa or swing night. Lessons come first."],
+ ["Volunteering","Social",[1,.2,.1,.2,0,.3,-.8,.4],1,2,"Sign up for one shift at a food bank."]
+].map(([name,cat,p,cost,time,step])=>({name,cat,p,cost,time,step}));
+
+// type: scale (-2..2 times d) | duel / pick (options with d) | budget | time
+const QUESTIONS = [
+ {type:"scale", q:"I recharge best when I'm alone.", d:{soc:-1}},
+ {type:"duel", q:"Pick your ideal evening.", opts:[
+   {t:"Around a campfire", s:"Stars, smoke, stories", d:{out:1,soc:.5}},
+   {t:"In a cozy reading nook", s:"Blanket, lamp, silence", d:{out:-1,soc:-.5,pat:.5}}]},
+ {type:"scale", q:"I get restless if I sit still for too long.", d:{act:1,pat:-.5}},
+ {type:"pick", q:"A friend hands you a free day pass. You choose:", opts:[
+   {t:"Climbing gym", s:"Chalk on your hands", d:{act:1,nov:.5,com:.3}},
+   {t:"Pottery class", s:"Clay under your nails", d:{cre:1,pat:.7,soc:.3}},
+   {t:"Strategy game tournament", s:"Out-think everyone", d:{com:1,ana:1,soc:.5}},
+   {t:"Botanical garden, solo, with a camera", s:"Just you and the light", d:{out:.7,cre:.5,soc:-.7}}]},
+ {type:"scale", q:"I love figuring out how things work.", d:{ana:1}},
+ {type:"duel", q:"Friday night plans. Which one?", opts:[
+   {t:"Board game night", s:"Snacks and rivalries", d:{com:.5,ana:.5,soc:.5,act:-.3}},
+   {t:"Dance party", s:"Loud music, no sitting", d:{act:1,soc:1,nov:.3}}]},
+ {type:"scale", q:"I'd rather make something than buy it.", d:{cre:.7,pat:.5}},
+ {type:"scale", q:"Losing a game bugs me more than I admit.", d:{com:1}},
+ {type:"duel", q:"You have a free afternoon and a challenge. Which?", opts:[
+   {t:"Paint a mural", s:"Big wall, no rules", d:{cre:1,nov:.3}},
+   {t:"Solve an escape room", s:"Clues, locks, a clock", d:{ana:1,com:.3,soc:.3}}]},
+ {type:"scale", q:"New experiences excite me more than familiar comforts.", d:{nov:1}},
+ {type:"pick", q:"What does a good win feel like to you?", opts:[
+   {t:"Beating my personal best", s:"Faster, stronger, further", d:{com:.5,act:.5,pat:.5}},
+   {t:"Making something people love", s:"The look on their faces", d:{cre:1,soc:.5}},
+   {t:"Cracking a hard problem", s:"That click in your brain", d:{ana:1,pat:.5}},
+   {t:"Coming home with a story", s:"You won't believe this", d:{nov:1,soc:.5}}]},
+ {type:"scale", q:"I can happily spend hours on one detailed task.", d:{pat:1}},
+ {type:"duel", q:"Which would you rather master?", opts:[
+   {t:"A song, by heart", s:"Every note, every pause", d:{pat:.6,cre:.5,out:-.3}},
+   {t:"A wild new trail", s:"Mud, views, blisters", d:{out:.8,nov:.6,act:.5}}]},
+ {type:"scale", q:"Fresh air fixes almost any mood.", d:{out:1}},
+ {type:"budget", q:"How much are you happy to spend getting started?", opts:[
+   {t:"Almost nothing", s:"Free or close to it", v:1},
+   {t:"A little", s:"A class or some gear", v:2},
+   {t:"Whatever it takes", s:"Gear is half the fun", v:3}]},
+ {type:"time", q:"How much free time can a new hobby get each week?", opts:[
+   {t:"A couple of hours", s:"Short sessions", v:1},
+   {t:"A few evenings", s:"Steady habit", v:2},
+   {t:"Whole weekends", s:"Go all in", v:3}]}
+];
+
+const MAXABS = Object.fromEntries(T.map(k=>[k,0]));
+QUESTIONS.forEach(q=>{
+  if(q.type==="scale") for(const k in q.d) MAXABS[k]+=2*Math.abs(q.d[k]);
+  else if(q.type==="duel"||q.type==="pick") T.forEach(k=>{MAXABS[k]+=Math.max(...q.opts.map(o=>Math.abs(o.d[k]||0)))});
+});
+
+function profile(answers){
+  const raw = Object.fromEntries(T.map(k=>[k,0]));
+  let budget=3, time=3;
+  QUESTIONS.forEach((q,i)=>{
+    const a = answers[i]; if(a==null) return;
+    if(q.type==="scale") for(const k in q.d) raw[k]+=a*q.d[k];
+    else if(q.type==="budget") budget=q.opts[a].v;
+    else if(q.type==="time") time=q.opts[a].v;
+    else for(const k in q.opts[a].d) raw[k]+=q.opts[a].d[k];
+  });
+  const u = Object.fromEntries(T.map(k=>[k, MAXABS[k]? Math.max(-1,Math.min(1, raw[k]/MAXABS[k]*1.6)) : 0]));
+  return {u,budget,time};
+}
+
+function rank(pr){
+  return HOBBIES.map(h=>{
+    let num=0, den=0;
+    T.forEach((k,i)=>{const hv=h.p[i], w=.35+Math.abs(hv); num+=w*Math.abs(pr.u[k]-hv); den+=w*2});
+    let m = 1-num/den;
+    if(h.cost>pr.budget) m-=.07*(h.cost-pr.budget);
+    if(h.time>pr.time) m-=.06*(h.time-pr.time);
+    const pct = Math.round(Math.max(1,Math.min(99,(m-.35)/.6*100)));
+    return {...h, m, pct, why:whyFor(h,pr)};
+  }).sort((a,b)=>b.m-a.m);
+}
+
+function whyFor(h,pr){
+  const fits = T.map((k,i)=>({k, s:h.p[i]*pr.u[k], hv:h.p[i]}))
+    .filter(x=>x.s>0.08 && Math.abs(x.hv)>=.4).sort((a,b)=>b.s-a.s).slice(0,2)
+    .map(x=>PHRASE[x.k][pr.u[x.k]>0?0:1]);
+  const notes=[];
+  if(h.cost>pr.budget) notes.push("it costs more to start than you'd like");
+  if(h.time>pr.time) notes.push("it wants more time than you have");
+  let s = fits.length ? "Fits because "+fits.join(" and ")+"." : "A wildcard: it doesn't lean hard on your strongest traits.";
+  if(notes.length) s += " Watch out: "+notes.join(", and ")+".";
+  return s;
+}
+
+function topTraits(u){
+  return T.map(k=>({k,v:u[k]})).sort((a,b)=>Math.abs(b.v)-Math.abs(a.v)).slice(0,3)
+    .map(x=>x.v>=0?TL[x.k]:TN[x.k]);
+}
+
+/* ---------------- state ---------------- */
+let S = {screen:"intro", i:0, answers:Array(QUESTIONS.length).fill(null), filter:"All"};
+const $ = s=>document.querySelector(s);
+const app = $("#app");
+let radarCur = Object.fromEntries(T.map(k=>[k,.5]));
+let locked = false;
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+function render(){
+  if(S.screen==="intro") renderIntro();
+  else if(S.screen==="quiz") renderQuiz();
+  else if(S.screen==="shuffle") renderShuffle();
+  else renderResults();
+}
+
+/* ---------------- intro ---------------- */
+function renderIntro(){
+  const names = HOBBIES.map(h=>`<span>${esc(h.name)}</span>`).join("");
+  const half = Math.ceil(HOBBIES.length/2);
+  const rowA = HOBBIES.slice(0,half).map(h=>`<span>${esc(h.name)}</span>`).join("");
+  const rowB = HOBBIES.slice(half).map(h=>`<span>${esc(h.name)}</span>`).join("");
+  app.innerHTML = `
+  <section class="sticker intro anim-in">
+    <span class="mono">A personality test that deals you hobbies</span>
+    <h1>What should you do with your free time?</h1>
+    <p class="lede">Answer 16 quick questions about how you think, move and unwind. The matcher builds your trait profile as you go, then ranks 44 hobbies from most to least likely to stick.</p>
+    <div class="row">
+      <button class="btn primary" id="start">Start the test →</button>
+      <div class="facts"><span class="fact">16 questions</span><span class="fact">About 3 minutes</span><span class="fact">8 traits scored</span></div>
+    </div>
+    <div class="marquee" aria-hidden="true"><div class="track">${rowA}${rowA}</div></div>
+    <div class="marquee rev" aria-hidden="true"><div class="track">${rowB}${rowB}</div></div>
+    <div class="how">
+      <div><b>Answer honestly</b>Sliders, this-or-that picks and scenarios. No right answers.</div>
+      <div><b>Watch your profile form</b>A live radar maps 8 traits and guesses your top hobby as you go.</div>
+      <div><b>Get your ranked deck</b>Every hobby scored, with why it fits and a first step to try.</div>
+    </div>
+  </section>`;
+  $("#start").onclick = ()=>{S.screen="quiz"; S.i=0; render();};
+}
+
+/* ---------------- quiz ---------------- */
+function renderQuiz(){
+  if(!$(".quiz")){
+    app.innerHTML = `
+    <div class="quiz">
+      <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+        <div class="progress"><span class="mono" id="count"></span><div class="track-p"><span id="fill"></span></div></div>
+        <section class="sticker stage" id="stage" aria-live="polite"></section>
+      </div>
+      <aside class="sticker side">
+        <h3>Your profile, live</h3>
+        <canvas class="radar" id="radar" width="300" height="300" aria-label="Trait radar chart"></canvas>
+        <div class="hunch"><span class="mono" style="color:var(--muted)">Current top match</span>
+          <div class="name" id="hunch">Answer a couple first…</div><div class="sub" id="hunchSub"></div></div>
+      </aside>
+    </div>`;
+  }
+  drawQuestion();
+  updateSide();
+}
+
+function drawQuestion(){
+  const q = QUESTIONS[S.i], a = S.answers[S.i], n = QUESTIONS.length;
+  $("#count").textContent = `${S.i+1} / ${n}`;
+  $("#fill").style.width = `${(S.i)/n*100}%`;
+  const kinds = {scale:"How true is this?",duel:"This or that",pick:"Scenario",budget:"Practical stuff",time:"Practical stuff"};
+  let body="";
+  if(q.type==="scale"){
+    body = `<div class="scale"><div class="dots" role="radiogroup" aria-label="Agreement">
+      ${[-2,-1,0,1,2].map((v,j)=>`<button class="dot ${a===v?"on":""}" data-v="${v}" role="radio" aria-checked="${a===v}" aria-label="${["Strongly disagree","Disagree","Neutral","Agree","Strongly agree"][j]}">${j+1}</button>`).join("")}
+      </div><div class="ends"><span>Nope, not me</span><span>That's so me</span></div></div>`;
+  } else {
+    const cls = q.opts.length===2?"two":q.opts.length===3?"three":"four";
+    const tiles = q.opts.map((o,j)=>`<button class="tile ${a===j?"on":""}" data-j="${j}"><span class="key">${j+1}</span><b>${esc(o.t)}</b><small>${esc(o.s)}</small></button>`);
+    body = `<div class="tiles ${cls}">${cls==="two"?tiles[0]+'<span class="or">OR</span>'+tiles[1]:tiles.join("")}</div>`;
+  }
+  const stage = $("#stage");
+  stage.innerHTML = `
+    <div class="kind mono"><span>${kinds[q.type]}</span><span>Q${S.i+1}</span></div>
+    <h2 class="q">${esc(q.q)}</h2>
+    ${body}
+    <div class="navrow">
+      <button class="btn ghost" id="back" ${S.i===0?"disabled":""}>← Back</button>
+      <span class="hint">Keys: ${q.type==="scale"?"1–5":"1–"+q.opts.length} to answer, Backspace to go back</span>
+    </div>`;
+  stage.classList.remove("anim-in","anim-out"); void stage.offsetWidth; stage.classList.add("anim-in");
+  stage.querySelectorAll(".dot").forEach(b=>b.onclick=()=>choose(+b.dataset.v, b));
+  stage.querySelectorAll(".tile").forEach(b=>b.onclick=()=>choose(+b.dataset.j, b));
+  $("#back").onclick = back;
+  locked=false;
+}
+
+function choose(val, el){
+  if(locked) return; locked=true;
+  S.answers[S.i]=val;
+  el.parentElement.querySelectorAll(".on").forEach(x=>x.classList.remove("on"));
+  el.classList.add("on");
+  updateSide();
+  setTimeout(()=>{
+    const stage=$("#stage"); stage.classList.remove("anim-in"); stage.classList.add("anim-out");
+    setTimeout(()=>{
+      if(S.i<QUESTIONS.length-1){S.i++; drawQuestion();}
+      else{ $("#fill").style.width="100%"; S.screen="shuffle"; render(); }
+    },200);
+  },320);
+}
+function back(){ if(S.i>0 && !locked){S.i--; drawQuestion();} }
+
+function updateSide(){
+  const pr = profile(S.answers);
+  radarTarget = Object.fromEntries(T.map(k=>[k,(pr.u[k]+1)/2]));
+  animateRadar();
+  const answered = S.answers.filter(x=>x!=null).length;
+  const h = $("#hunch"), sub=$("#hunchSub"); if(!h) return;
+  if(answered<2){h.textContent="Answer a couple first…"; sub.textContent=""; return;}
+  const top = rank(pr)[0];
+  if(h.textContent!==top.name){h.style.opacity=0; setTimeout(()=>{h.textContent=top.name; h.style.opacity=1},180);}
+  sub.textContent = `${top.pct}% match so far · will shift as you answer`;
+}
+
+/* ---------------- radar ---------------- */
+let radarTarget = {...radarCur}, radarRAF=null;
+function animateRadar(){
+  if(radarRAF) return;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const step=()=>{
+    let moving=false;
+    T.forEach(k=>{const d=radarTarget[k]-radarCur[k]; if(Math.abs(d)>.002){moving=true; radarCur[k]+= reduce? d : d*.14} else radarCur[k]=radarTarget[k]});
+    document.querySelectorAll("canvas.radar").forEach(c=>drawRadar(c,radarCur));
+    radarRAF = moving? requestAnimationFrame(step) : null;
+  };
+  radarRAF=requestAnimationFrame(step);
+}
+function drawRadar(c,vals){
+  const cs=getComputedStyle(document.documentElement), col=n=>cs.getPropertyValue(n).trim();
+  const dpr=window.devicePixelRatio||1, W=c.clientWidth||300;
+  if(c.width!==Math.round(W*dpr)){c.width=Math.round(W*dpr); c.height=Math.round(W*dpr);}
+  const x=c.getContext("2d"); x.setTransform(dpr,0,0,dpr,0,0); x.clearRect(0,0,W,W);
+  const cx=W/2, cy=W/2, R=W/2-44, n=T.length, ang=i=>-Math.PI/2+i*2*Math.PI/n;
+  x.lineWidth=1; x.strokeStyle=col("--line");
+  for(let r=1;r<=4;r++){x.beginPath(); for(let i=0;i<=n;i++){const a=ang(i%n); const px=cx+Math.cos(a)*R*r/4, py=cy+Math.sin(a)*R*r/4; i?x.lineTo(px,py):x.moveTo(px,py)} x.stroke();}
+  for(let i=0;i<n;i++){x.beginPath(); x.moveTo(cx,cy); x.lineTo(cx+Math.cos(ang(i))*R, cy+Math.sin(ang(i))*R); x.stroke();}
+  x.beginPath();
+  T.forEach((k,i)=>{const r=R*(.08+.92*vals[k]); const px=cx+Math.cos(ang(i))*r, py=cy+Math.sin(ang(i))*r; i?x.lineTo(px,py):x.moveTo(px,py)});
+  x.closePath(); x.globalAlpha=.55; x.fillStyle=col("--pink"); x.fill(); x.globalAlpha=1;
+  x.lineWidth=2.5; x.strokeStyle=col("--edge"); x.lineJoin="round"; x.stroke();
+  T.forEach((k,i)=>{const r=R*(.08+.92*vals[k]); x.beginPath(); x.arc(cx+Math.cos(ang(i))*r, cy+Math.sin(ang(i))*r,4,0,7); x.fillStyle=col("--yellow"); x.fill(); x.lineWidth=2; x.stroke();});
+  x.fillStyle=col("--ink"); x.font=`600 11px ${col("--font-body")}`; x.textAlign="center"; x.textBaseline="middle";
+  T.forEach((k,i)=>{const a=ang(i); x.fillText(TL[k], cx+Math.cos(a)*(R+24), cy+Math.sin(a)*(R+16));});
+}
+
+/* ---------------- shuffle + results ---------------- */
+function renderShuffle(){
+  app.innerHTML = `<section class="sticker shuffle anim-in"><div class="deck"><span></span><span></span><span></span></div><p>Shuffling 44 hobbies against your profile…</p></section>`;
+  setTimeout(()=>{S.screen="results"; render(); confetti();}, matchMedia("(prefers-reduced-motion: reduce)").matches?200:1500);
+}
+
+let readingCtl=null, sampleFn=null;
+function renderResults(){
+  const pr=profile(S.answers), list=rank(pr), traits=topTraits(pr.u);
+  const budgetT=["","almost nothing","a little","whatever it takes"][pr.budget], timeT=["","a couple of hours","a few evenings","whole weekends"][pr.time];
+  const cats=["All",...Object.keys(CATS)];
+  app.innerHTML = `
+  <div class="wrap" style="gap:24px">
+    <section class="sticker res-head anim-in">
+      <div style="min-width:0">
+        <span class="mono" style="color:var(--muted)">Your free-time fortune</span>
+        <h2>You'd love ${esc(list[0].name.toLowerCase())}.</h2>
+        <div class="traits">${traits.map(t=>`<span class="tchip">${esc(t)}</span>`).join("")}</div>
+        <p style="margin:0 0 18px;max-width:58ch">Your strongest signals are <b>${traits.map(esc).join(", ")}</b>. You said a new hobby can cost <b>${budgetT}</b> and get <b>${timeT}</b> a week, so pricier or time-hungry picks were pushed down.</p>
+        <div class="res-actions">
+          <button class="btn primary" id="retake">Retake the test</button>
+          <button class="btn" id="copy">Copy my top 10</button>
+        </div>
+      </div>
+      <canvas class="radar" id="radar2" width="260" height="260" aria-label="Your trait radar"></canvas>
+    </section>
+
+    <section class="podium">
+      ${list.slice(0,3).map((h,i)=>`
+      <article class="pcard sticker"><div class="inner">
+        <div class="rank"><span class="medal">${i+1}</span><span class="pct">${h.pct}<small>%</small></span></div>
+        <h3>${esc(h.name)}</h3>
+        <div class="tags"><span class="tag cat" style="background:${CATS[h.cat]}">${h.cat}</span><span class="tag">${"$".repeat(h.cost)}</span><span class="tag">${["","light","medium","heavy"][h.time]} time</span></div>
+        <p class="why">${esc(h.why)}</p>
+        <p class="step"><b>First step</b>${esc(h.step)}</p>
+      </div></article>`).join("")}
+    </section>
+
+    <section class="sticker reading" id="reading" hidden>
+      <div class="top"><h3>Ask Claude for a personal reading</h3>
+        <div class="res-actions"><button class="btn primary" id="ask">Read my results</button><button class="btn ghost" id="stop" hidden>Stop</button></div></div>
+      <div class="out" id="readOut">Claude looks at your trait profile and top matches, then writes a short reading and a tiny first experiment for this week.</div>
+      <span class="note" id="readNote">Uses your own Claude account. You'll be asked to allow it the first time.</span>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:14px">
+      <div class="listhead"><h3>The full ranking</h3>
+        <div class="filters" role="toolbar" aria-label="Filter by category">${cats.map(c=>`<button class="chip ${S.filter===c?"on":""}" data-c="${c}">${c}</button>`).join("")}</div></div>
+      <div class="list" id="list"></div>
+    </section>
+  </div>`;
+  drawList(list);
+  radarCur = Object.fromEntries(T.map(k=>[k,.5])); radarTarget = Object.fromEntries(T.map(k=>[k,(pr.u[k]+1)/2])); animateRadar();
+  $("#retake").onclick=()=>{readingCtl?.abort(); S={screen:"intro",i:0,answers:Array(QUESTIONS.length).fill(null),filter:"All"}; render(); scrollTo({top:0,behavior:"smooth"});};
+  $("#copy").onclick=()=>{
+    const txt="My Free Time Fortune top 10:\n"+list.slice(0,10).map((h,i)=>`${i+1}. ${h.name} (${h.pct}%)`).join("\n");
+    navigator.clipboard.writeText(txt).then(()=>toast("Copied your top 10")).catch(()=>toast("Copy blocked here. Select the list to copy it."));
+  };
+  document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{S.filter=b.dataset.c; document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b)); drawList(list);});
+  setupReading(pr,list,traits);
+}
+
+function drawList(list){
+  const rows = list.map((h,i)=>({h,i})).filter(({h})=>S.filter==="All"||h.cat===S.filter);
+  $("#list").innerHTML = rows.map(({h,i},j)=>`
+    <div class="item" style="animation-delay:${Math.min(j,20)*25}ms">
+      <button aria-expanded="false">
+        <span class="n">#${String(i+1).padStart(2,"0")}</span>
+        <span class="t"><span class="dotcat" style="background:${CATS[h.cat]}"></span>${esc(h.name)}</span>
+        <span class="meter"><span style="width:${h.pct}%;background:${CATS[h.cat]}"></span></span>
+        <span class="p">${h.pct}%</span>
+      </button>
+      <div class="more" hidden>
+        <div class="tags"><span class="tag">${h.cat}</span><span class="tag">${"$".repeat(h.cost)} to start</span><span class="tag">${["","light","medium","heavy"][h.time]} time</span></div>
+        <span>${esc(h.why)}</span>
+        <span><b>First step:</b> ${esc(h.step)}</span>
+      </div>
+    </div>`).join("");
+  $("#list").querySelectorAll(".item > button").forEach(b=>b.onclick=()=>{
+    const m=b.nextElementSibling; m.hidden=!m.hidden; b.setAttribute("aria-expanded",String(!m.hidden));
+  });
+}
+
+async function setupReading(pr,list,traits){
+  const box=$("#reading");
+  if(!sampleFn){ try{ sampleFn = window.claude?.use ? await window.claude.use("sample") : null; }catch{ sampleFn=null; } }
+  if(!sampleFn || !document.body.contains(box)) return;
+  box.hidden=false;
+  const out=$("#readOut"), note=$("#readNote"), ask=$("#ask"), stop=$("#stop");
+  stop.onclick=()=>readingCtl?.abort();
+  ask.onclick=async()=>{
+    readingCtl=new AbortController();
+    ask.disabled=true; stop.hidden=false; out.classList.add("thinking"); out.textContent="Thinking…"; note.textContent="";
+    const prof=T.map(k=>`${TL[k]}: ${pr.u[k].toFixed(2)}`).join(", ");
+    const prompt=`You are a warm, witty hobby coach. A person took a personality quiz. Trait scores run from -1 (opposite) to +1 (strong).
+Traits: ${prof}
+Top traits: ${traits.join(", ")}
+Starting budget: ${["","almost nothing","a little","whatever it takes"][pr.budget]}. Weekly time: ${["","a couple of hours","a few evenings","whole weekends"][pr.time]}.
+Their top 8 hobby matches in order: ${list.slice(0,8).map(h=>`${h.name} (${h.pct}%)`).join("; ")}.
+Write a short personal reading in plain text, no markdown, under 170 words: one paragraph describing what kind of free-time person they are, one paragraph on why their #1 and one surprising pick from the top 8 suit them, then a final line starting "This week:" with one tiny, concrete experiment.`;
+    try{
+      await sampleFn(prompt,{signal:readingCtl.signal,onText:({text})=>{out.classList.remove("thinking"); out.textContent=text;}});
+    }catch(e){
+      out.classList.remove("thinking");
+      out.textContent = e.text || "";
+      const msg={not_granted:"Claude wasn't allowed for this page, so the reading is off.",sampling_disabled:"Claude isn't available for this account.",rate_limited:"Too many requests right now. Try again in a minute.",session_expired:"Sign in again to get a reading.",refused:"Claude couldn't write this one. Try retaking the test."}[e.code];
+      if(e.code==="not_granted"||e.code==="sampling_disabled"){box.hidden=true; return;}
+      if(e.code!=="cancelled") note.textContent = msg || "Something interrupted the reading. Try again.";
+      if(!out.textContent) out.textContent="Claude looks at your trait profile and top matches, then writes a short reading.";
+    }finally{ ask.disabled=false; ask.textContent="Read it again"; stop.hidden=true; }
+  };
+}
+
+/* ---------------- fx ---------------- */
+function confetti(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c=$("#confetti"); c.hidden=false; const x=c.getContext("2d");
+  const W=c.width=innerWidth, H=c.height=innerHeight;
+  const cs=getComputedStyle(document.documentElement), cols=["--pink","--yellow","--blue","--green","--orange"].map(n=>cs.getPropertyValue(n).trim());
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.35,vx:(Math.random()-.5)*16,vy:-Math.random()*14-4,r:Math.random()*6+4,a:Math.random()*6,va:(Math.random()-.5)*.4,c:cols[Math.floor(Math.random()*cols.length)],s:Math.random()<.5}));
+  let t=0;
+  (function f(){
+    x.clearRect(0,0,W,H); t++;
+    P.forEach(p=>{p.vy+=.35; p.vx*=.99; p.x+=p.vx; p.y+=p.vy; p.a+=p.va;
+      x.save(); x.translate(p.x,p.y); x.rotate(p.a); x.fillStyle=p.c;
+      if(p.s) x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2); else {x.beginPath(); x.arc(0,0,p.r/2.4,0,7); x.fill();}
+      x.restore();});
+    if(t<170) requestAnimationFrame(f); else {x.clearRect(0,0,W,H); c.hidden=true;}
+  })();
+}
+function toast(m){const t=$("#toast"); t.textContent=m; t.hidden=false; clearTimeout(toast.h); toast.h=setTimeout(()=>t.hidden=true,2200);}
+
+document.addEventListener("keydown",e=>{
+  if(S.screen!=="quiz"||e.metaKey||e.ctrlKey||e.altKey) return;
+  const q=QUESTIONS[S.i];
+  if(e.key==="Backspace"){e.preventDefault(); back(); return;}
+  const n=parseInt(e.key,10); if(!n) return;
+  if(q.type==="scale" && n<=5){const b=document.querySelector(`.dot[data-v="${n-3}"]`); b&&choose(n-3,b);}
+  else if(q.opts && n<=q.opts.length){const b=document.querySelector(`.tile[data-j="${n-1}"]`); b&&choose(n-1,b);}
+});
+addEventListener("resize",()=>document.querySelectorAll("canvas.radar").forEach(c=>drawRadar(c,radarCur)));
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>document.querySelectorAll("canvas.radar").forEach(c=>drawRadar(c,radarCur)));
+
+/* ---------------- boot ---------------- */
+function start(data){
+  if(data && data.answers && data.answers.length===QUESTIONS.length){
+    S={...S,...data}; if(S.screen==="shuffle") S.screen="results";
+  }
+  render();
+}
+window.claude?.hot?.snapshot?.(()=>({screen:S.screen,i:S.i,answers:S.answers,filter:S.filter}));
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+</script>
+</body>
+</html>

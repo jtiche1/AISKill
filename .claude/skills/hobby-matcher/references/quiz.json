@@ -1,0 +1,39 @@
+{
+ "_doc": "The 16-question Free Time Fortune exam. 'scale' answers are integers -2 (strongly disagree) to +2 (strongly agree) and multiply the 'd' weights. 'duel'/'pick' answers are the 0-based option index and add that option's 'd'. 'budget'/'time' answers are the 0-based option index and set the constraint to that option's 'v'. Identical to the web version, so both give the same ranking.",
+ "questions": [
+  {"type": "scale", "q": "I recharge best when I'm alone.", "d": {"soc": -1}},
+  {"type": "duel", "q": "Pick your ideal evening.", "opts": [
+    {"t": "Around a campfire", "d": {"out": 1, "soc": 0.5}},
+    {"t": "In a cozy reading nook", "d": {"out": -1, "soc": -0.5, "pat": 0.5}}]},
+  {"type": "scale", "q": "I get restless if I sit still for too long.", "d": {"act": 1, "pat": -0.5}},
+  {"type": "pick", "q": "A friend hands you a free day pass. You choose:", "opts": [
+    {"t": "Climbing gym", "d": {"act": 1, "nov": 0.5, "com": 0.3}},
+    {"t": "Pottery class", "d": {"cre": 1, "pat": 0.7, "soc": 0.3}},
+    {"t": "Strategy game tournament", "d": {"com": 1, "ana": 1, "soc": 0.5}},
+    {"t": "Botanical garden, solo, with a camera", "d": {"out": 0.7, "cre": 0.5, "soc": -0.7}}]},
+  {"type": "scale", "q": "I love figuring out how things work.", "d": {"ana": 1}},
+  {"type": "duel", "q": "Friday night plans. Which one?", "opts": [
+    {"t": "Board game night", "d": {"com": 0.5, "ana": 0.5, "soc": 0.5, "act": -0.3}},
+    {"t": "Dance party", "d": {"act": 1, "soc": 1, "nov": 0.3}}]},
+  {"type": "scale", "q": "I'd rather make something than buy it.", "d": {"cre": 0.7, "pat": 0.5}},
+  {"type": "scale", "q": "Losing a game bugs me more than I admit.", "d": {"com": 1}},
+  {"type": "duel", "q": "You have a free afternoon and a challenge. Which?", "opts": [
+    {"t": "Paint a mural", "d": {"cre": 1, "nov": 0.3}},
+    {"t": "Solve an escape room", "d": {"ana": 1, "com": 0.3, "soc": 0.3}}]},
+  {"type": "scale", "q": "New experiences excite me more than familiar comforts.", "d": {"nov": 1}},
+  {"type": "pick", "q": "What does a good win feel like to you?", "opts": [
+    {"t": "Beating my personal best", "d": {"com": 0.5, "act": 0.5, "pat": 0.5}},
+    {"t": "Making something people love", "d": {"cre": 1, "soc": 0.5}},
+    {"t": "Cracking a hard problem", "d": {"ana": 1, "pat": 0.5}},
+    {"t": "Coming home with a story", "d": {"nov": 1, "soc": 0.5}}]},
+  {"type": "scale", "q": "I can happily spend hours on one detailed task.", "d": {"pat": 1}},
+  {"type": "duel", "q": "Which would you rather master?", "opts": [
+    {"t": "A song, by heart", "d": {"pat": 0.6, "cre": 0.5, "out": -0.3}},
+    {"t": "A wild new trail", "d": {"out": 0.8, "nov": 0.6, "act": 0.5}}]},
+  {"type": "scale", "q": "Fresh air fixes almost any mood.", "d": {"out": 1}},
+  {"type": "budget", "q": "How much are you happy to spend getting started?", "opts": [
+    {"t": "Almost nothing", "v": 1}, {"t": "A little (a class or some gear)", "v": 2}, {"t": "Whatever it takes", "v": 3}]},
+  {"type": "time", "q": "How much free time can a new hobby get each week?", "opts": [
+    {"t": "A couple of hours", "v": 1}, {"t": "A few evenings", "v": 2}, {"t": "Whole weekends", "v": 3}]}
+ ]
+}

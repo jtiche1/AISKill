@@ -1,0 +1,753 @@
+{
+ "_doc": "44 hobbies scored on 8 traits from -1 (opposite) to +1 (core to the hobby). cost/time: 1 low, 2 medium, 3 high. Shared with the Free Time Fortune web quiz.",
+ "hobbies": [
+  {
+   "name": "Rock climbing",
+   "category": "Active",
+   "profile": {
+    "soc": 0.3,
+    "act": 1.0,
+    "cre": 0.0,
+    "out": 0.4,
+    "ana": 0.3,
+    "nov": 0.8,
+    "com": 0.4,
+    "pat": 0.3
+   },
+   "cost": 2,
+   "time": 2,
+   "first_step": "Book an intro bouldering session. Shoes are rentable."
+  },
+  {
+   "name": "Trail running",
+   "category": "Active",
+   "profile": {
+    "soc": -0.3,
+    "act": 1.0,
+    "cre": -0.3,
+    "out": 1.0,
+    "ana": 0.0,
+    "nov": 0.3,
+    "com": 0.5,
+    "pat": 0.4
+   },
+   "cost": 1,
+   "time": 2,
+   "first_step": "Pick a 3 km dirt loop and walk the hills. No shame."
+  },
+  {
+   "name": "Hiking",
+   "category": "Outdoors",
+   "profile": {
+    "soc": 0.0,
+    "act": 0.7,
+    "cre": 0.0,
+    "out": 1.0,
+    "ana": 0.0,
+    "nov": 0.5,
+    "com": -0.3,
+    "pat": 0.2
+   },
+   "cost": 1,
+   "time": 2,
+   "first_step": "Find a 5 km trail within an hour of home."
+  },
+  {
+   "name": "Surfing",
+   "category": "Outdoors",
+   "profile": {
+    "soc": 0.0,
+    "act": 1.0,
+    "cre": 0.2,
+    "out": 1.0,
+    "ana": 0.0,
+    "nov": 1.0,
+    "com": 0.2,
+    "pat": 0.4
+   },
+   "cost": 3,
+   "time": 3,
+   "first_step": "Take a group lesson on a soft-top board."
+  },
+  {
+   "name": "Kayaking",
+   "category": "Outdoors",
+   "profile": {
+    "soc": 0.0,
+    "act": 0.8,
+    "cre": 0.0,
+    "out": 1.0,
+    "ana": 0.0,
+    "nov": 0.7,
+    "com": 0.0,
+    "pat": 0.2
+   },
+   "cost": 2,
+   "time": 2,
+   "first_step": "Rent a sit-on-top kayak for an hour on calm water."
+  },
+  {
+   "name": "Birdwatching",
+   "category": "Outdoors",
+   "profile": {
+    "soc": -0.6,
+    "act": -0.2,
+    "cre": 0.0,
+    "out": 1.0,
+    "ana": 0.5,
+    "nov": 0.0,
+    "com": -0.5,
+    "pat": 1.0
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Get a free bird ID app and log 5 species in a park."
+  },
+  {
+   "name": "Gardening",
+   "category": "Outdoors",
+   "profile": {
+    "soc": -0.4,
+    "act": 0.2,
+    "cre": 0.5,
+    "out": 0.9,
+    "ana": 0.2,
+    "nov": -0.3,
+    "com": -0.6,
+    "pat": 0.9
+   },
+   "cost": 1,
+   "time": 2,
+   "first_step": "Grow basil and mint on a sunny windowsill."
+  },
+  {
+   "name": "Foraging",
+   "category": "Outdoors",
+   "profile": {
+    "soc": -0.3,
+    "act": 0.4,
+    "cre": 0.0,
+    "out": 1.0,
+    "ana": 0.6,
+    "nov": 0.6,
+    "com": -0.5,
+    "pat": 0.6
+   },
+   "cost": 1,
+   "time": 2,
+   "first_step": "Join a guided walk before you pick anything."
+  },
+  {
+   "name": "Camping",
+   "category": "Outdoors",
+   "profile": {
+    "soc": 0.5,
+    "act": 0.5,
+    "cre": 0.0,
+    "out": 1.0,
+    "ana": 0.1,
+    "nov": 0.6,
+    "com": -0.5,
+    "pat": 0.2
+   },
+   "cost": 2,
+   "time": 3,
+   "first_step": "Book a drive-in campsite for one night."
+  },
+  {
+   "name": "Scuba diving",
+   "category": "Outdoors",
+   "profile": {
+    "soc": 0.3,
+    "act": 0.6,
+    "cre": 0.0,
+    "out": 1.0,
+    "ana": 0.2,
+    "nov": 1.0,
+    "com": -0.2,
+    "pat": 0.3
+   },
+   "cost": 3,
+   "time": 3,
+   "first_step": "Try a pool 'discover scuba' session."
+  },
+  {
+   "name": "Geocaching",
+   "category": "Outdoors",
+   "profile": {
+    "soc": 0.0,
+    "act": 0.6,
+    "cre": 0.0,
+    "out": 1.0,
+    "ana": 0.6,
+    "nov": 0.8,
+    "com": 0.3,
+    "pat": 0.3
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Install the app and find the nearest cache."
+  },
+  {
+   "name": "Astronomy",
+   "category": "Mind",
+   "profile": {
+    "soc": -0.4,
+    "act": -0.6,
+    "cre": 0.0,
+    "out": 0.6,
+    "ana": 1.0,
+    "nov": 0.4,
+    "com": -0.5,
+    "pat": 0.8
+   },
+   "cost": 2,
+   "time": 1,
+   "first_step": "Find Saturn with a free sky-map app and binoculars."
+  },
+  {
+   "name": "Photography",
+   "category": "Creative",
+   "profile": {
+    "soc": -0.3,
+    "act": 0.2,
+    "cre": 0.9,
+    "out": 0.6,
+    "ana": 0.3,
+    "nov": 0.5,
+    "com": -0.2,
+    "pat": 0.5
+   },
+   "cost": 2,
+   "time": 1,
+   "first_step": "Shoot 20 phone photos of a single color."
+  },
+  {
+   "name": "Watercolor painting",
+   "category": "Creative",
+   "profile": {
+    "soc": -0.6,
+    "act": -0.7,
+    "cre": 1.0,
+    "out": 0.0,
+    "ana": -0.2,
+    "nov": 0.0,
+    "com": -0.6,
+    "pat": 0.7
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Get a student pan set and paint one lemon."
+  },
+  {
+   "name": "Creative writing",
+   "category": "Creative",
+   "profile": {
+    "soc": -0.8,
+    "act": -0.8,
+    "cre": 1.0,
+    "out": -0.3,
+    "ana": 0.3,
+    "nov": 0.2,
+    "com": -0.3,
+    "pat": 0.7
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Write a 100-word story tonight, start to finish."
+  },
+  {
+   "name": "Learning guitar",
+   "category": "Creative",
+   "profile": {
+    "soc": -0.2,
+    "act": -0.4,
+    "cre": 0.8,
+    "out": -0.3,
+    "ana": 0.3,
+    "nov": 0.2,
+    "com": 0.0,
+    "pat": 0.9
+   },
+   "cost": 2,
+   "time": 2,
+   "first_step": "Learn G, C and D. That unlocks hundreds of songs."
+  },
+  {
+   "name": "Calligraphy",
+   "category": "Creative",
+   "profile": {
+    "soc": -0.6,
+    "act": -0.8,
+    "cre": 0.9,
+    "out": -0.4,
+    "ana": 0.0,
+    "nov": -0.3,
+    "com": -0.5,
+    "pat": 1.0
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Practice basic strokes with a brush pen."
+  },
+  {
+   "name": "Journaling",
+   "category": "Creative",
+   "profile": {
+    "soc": -0.9,
+    "act": -0.8,
+    "cre": 0.6,
+    "out": -0.2,
+    "ana": 0.3,
+    "nov": -0.5,
+    "com": -0.9,
+    "pat": 0.6
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Write three lines before bed for a week."
+  },
+  {
+   "name": "DJing",
+   "category": "Creative",
+   "profile": {
+    "soc": 0.6,
+    "act": 0.2,
+    "cre": 0.9,
+    "out": -0.5,
+    "ana": 0.4,
+    "nov": 0.6,
+    "com": 0.2,
+    "pat": 0.5
+   },
+   "cost": 3,
+   "time": 2,
+   "first_step": "Try free DJ software with your own music library."
+  },
+  {
+   "name": "Upcycling thrifted clothes",
+   "category": "Creative",
+   "profile": {
+    "soc": 0.3,
+    "act": 0.1,
+    "cre": 0.9,
+    "out": -0.3,
+    "ana": 0.0,
+    "nov": 0.7,
+    "com": -0.2,
+    "pat": 0.4
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Thrift one shirt and alter it."
+  },
+  {
+   "name": "Pottery",
+   "category": "Making",
+   "profile": {
+    "soc": 0.2,
+    "act": -0.2,
+    "cre": 0.9,
+    "out": -0.3,
+    "ana": 0.0,
+    "nov": 0.2,
+    "com": -0.5,
+    "pat": 0.9
+   },
+   "cost": 2,
+   "time": 2,
+   "first_step": "Book a one-night wheel-throwing taster class."
+  },
+  {
+   "name": "Knitting",
+   "category": "Making",
+   "profile": {
+    "soc": -0.2,
+    "act": -0.8,
+    "cre": 0.7,
+    "out": -0.5,
+    "ana": 0.3,
+    "nov": -0.5,
+    "com": -0.6,
+    "pat": 1.0
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Knit a garter-stitch square with chunky yarn."
+  },
+  {
+   "name": "Woodworking",
+   "category": "Making",
+   "profile": {
+    "soc": -0.4,
+    "act": 0.3,
+    "cre": 0.8,
+    "out": -0.2,
+    "ana": 0.6,
+    "nov": 0.1,
+    "com": -0.4,
+    "pat": 1.0
+   },
+   "cost": 3,
+   "time": 3,
+   "first_step": "Build a simple box at a community makerspace."
+  },
+  {
+   "name": "Baking bread",
+   "category": "Making",
+   "profile": {
+    "soc": 0.0,
+    "act": -0.3,
+    "cre": 0.7,
+    "out": -0.6,
+    "ana": 0.5,
+    "nov": 0.1,
+    "com": -0.3,
+    "pat": 0.8
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Bake a no-knead loaf. It's hard to mess up."
+  },
+  {
+   "name": "Cooking world cuisines",
+   "category": "Making",
+   "profile": {
+    "soc": 0.4,
+    "act": -0.2,
+    "cre": 0.8,
+    "out": -0.5,
+    "ana": 0.3,
+    "nov": 0.9,
+    "com": -0.2,
+    "pat": 0.4
+   },
+   "cost": 2,
+   "time": 1,
+   "first_step": "Pick one country and cook a dish from it this weekend."
+  },
+  {
+   "name": "Fermenting & homebrewing",
+   "category": "Making",
+   "profile": {
+    "soc": 0.0,
+    "act": -0.4,
+    "cre": 0.4,
+    "out": -0.3,
+    "ana": 0.9,
+    "nov": 0.4,
+    "com": -0.3,
+    "pat": 0.8
+   },
+   "cost": 2,
+   "time": 2,
+   "first_step": "Make a jar of sauerkraut: cabbage, salt, patience."
+  },
+  {
+   "name": "Miniature painting",
+   "category": "Making",
+   "profile": {
+    "soc": -0.7,
+    "act": -0.9,
+    "cre": 0.8,
+    "out": -0.6,
+    "ana": 0.4,
+    "nov": 0.0,
+    "com": -0.2,
+    "pat": 1.0
+   },
+   "cost": 2,
+   "time": 2,
+   "first_step": "Paint one miniature with a starter paint set."
+  },
+  {
+   "name": "Board games",
+   "category": "Mind",
+   "profile": {
+    "soc": 0.9,
+    "act": -0.8,
+    "cre": 0.1,
+    "out": -0.5,
+    "ana": 0.8,
+    "nov": 0.1,
+    "com": 0.7,
+    "pat": 0.3
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Visit a board game café and ask staff for a pick."
+  },
+  {
+   "name": "Chess",
+   "category": "Mind",
+   "profile": {
+    "soc": -0.1,
+    "act": -0.9,
+    "cre": 0.0,
+    "out": -0.5,
+    "ana": 1.0,
+    "nov": 0.0,
+    "com": 1.0,
+    "pat": 0.8
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Play the daily puzzle on a free chess site."
+  },
+  {
+   "name": "Tabletop RPGs",
+   "category": "Mind",
+   "profile": {
+    "soc": 1.0,
+    "act": -0.8,
+    "cre": 1.0,
+    "out": -0.5,
+    "ana": 0.5,
+    "nov": 0.6,
+    "com": 0.0,
+    "pat": 0.4
+   },
+   "cost": 1,
+   "time": 2,
+   "first_step": "Join a one-shot game night at a local game store."
+  },
+  {
+   "name": "Escape rooms",
+   "category": "Mind",
+   "profile": {
+    "soc": 0.9,
+    "act": 0.0,
+    "cre": 0.2,
+    "out": -0.5,
+    "ana": 1.0,
+    "nov": 0.8,
+    "com": 0.5,
+    "pat": -0.2
+   },
+   "cost": 2,
+   "time": 1,
+   "first_step": "Book a beginner room with three or four friends."
+  },
+  {
+   "name": "Coding side projects",
+   "category": "Mind",
+   "profile": {
+    "soc": -0.6,
+    "act": -0.9,
+    "cre": 0.6,
+    "out": -0.6,
+    "ana": 1.0,
+    "nov": 0.4,
+    "com": 0.0,
+    "pat": 0.9
+   },
+   "cost": 1,
+   "time": 2,
+   "first_step": "Build a tiny web page that does one silly thing."
+  },
+  {
+   "name": "Puzzles & crosswords",
+   "category": "Mind",
+   "profile": {
+    "soc": -0.6,
+    "act": -0.9,
+    "cre": 0.0,
+    "out": -0.5,
+    "ana": 0.9,
+    "nov": -0.4,
+    "com": 0.2,
+    "pat": 0.8
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Do one easy crossword a day for a week."
+  },
+  {
+   "name": "Learning a language",
+   "category": "Mind",
+   "profile": {
+    "soc": 0.0,
+    "act": -0.6,
+    "cre": 0.2,
+    "out": -0.3,
+    "ana": 0.8,
+    "nov": 0.7,
+    "com": 0.1,
+    "pat": 0.9
+   },
+   "cost": 1,
+   "time": 2,
+   "first_step": "Do 10 minutes a day and label things around your home."
+  },
+  {
+   "name": "Speedrunning games",
+   "category": "Mind",
+   "profile": {
+    "soc": -0.5,
+    "act": -0.9,
+    "cre": 0.0,
+    "out": -0.8,
+    "ana": 0.7,
+    "nov": 0.2,
+    "com": 1.0,
+    "pat": 1.0
+   },
+   "cost": 2,
+   "time": 2,
+   "first_step": "Pick a game you know well and time one run."
+  },
+  {
+   "name": "Yoga",
+   "category": "Active",
+   "profile": {
+    "soc": -0.2,
+    "act": 0.6,
+    "cre": 0.0,
+    "out": 0.0,
+    "ana": 0.0,
+    "nov": -0.3,
+    "com": -0.8,
+    "pat": 0.7
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Follow a free 20-minute beginner video."
+  },
+  {
+   "name": "Martial arts",
+   "category": "Active",
+   "profile": {
+    "soc": 0.4,
+    "act": 1.0,
+    "cre": 0.0,
+    "out": -0.4,
+    "ana": 0.2,
+    "nov": 0.4,
+    "com": 0.9,
+    "pat": 0.8
+   },
+   "cost": 2,
+   "time": 2,
+   "first_step": "Most dojos offer a free trial class. Take it."
+  },
+  {
+   "name": "Pickleball",
+   "category": "Active",
+   "profile": {
+    "soc": 1.0,
+    "act": 0.8,
+    "cre": -0.2,
+    "out": 0.4,
+    "ana": 0.1,
+    "nov": 0.0,
+    "com": 0.8,
+    "pat": 0.0
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Find open play at a local court. Paddles are often loaned."
+  },
+  {
+   "name": "Cycling",
+   "category": "Active",
+   "profile": {
+    "soc": -0.2,
+    "act": 1.0,
+    "cre": 0.0,
+    "out": 0.9,
+    "ana": 0.1,
+    "nov": 0.4,
+    "com": 0.3,
+    "pat": 0.4
+   },
+   "cost": 3,
+   "time": 2,
+   "first_step": "Ride a flat 10 km route on any bike you have."
+  },
+  {
+   "name": "Swimming",
+   "category": "Active",
+   "profile": {
+    "soc": -0.5,
+    "act": 1.0,
+    "cre": 0.0,
+    "out": 0.2,
+    "ana": 0.0,
+    "nov": -0.2,
+    "com": 0.2,
+    "pat": 0.5
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Swim 10 lengths at any pace, resting when you need."
+  },
+  {
+   "name": "Singing in a choir",
+   "category": "Social",
+   "profile": {
+    "soc": 1.0,
+    "act": -0.2,
+    "cre": 0.6,
+    "out": -0.4,
+    "ana": 0.0,
+    "nov": 0.0,
+    "com": -0.2,
+    "pat": 0.5
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Find a community choir with no audition."
+  },
+  {
+   "name": "Improv comedy",
+   "category": "Social",
+   "profile": {
+    "soc": 1.0,
+    "act": 0.2,
+    "cre": 0.9,
+    "out": -0.5,
+    "ana": 0.0,
+    "nov": 1.0,
+    "com": 0.0,
+    "pat": -0.3
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Drop into a beginner improv jam. Everyone's nervous."
+  },
+  {
+   "name": "Social dancing",
+   "category": "Social",
+   "profile": {
+    "soc": 1.0,
+    "act": 0.9,
+    "cre": 0.5,
+    "out": -0.5,
+    "ana": 0.0,
+    "nov": 0.6,
+    "com": 0.1,
+    "pat": 0.3
+   },
+   "cost": 1,
+   "time": 1,
+   "first_step": "Go to a beginner salsa or swing night. Lessons come first."
+  },
+  {
+   "name": "Volunteering",
+   "category": "Social",
+   "profile": {
+    "soc": 1.0,
+    "act": 0.2,
+    "cre": 0.1,
+    "out": 0.2,
+    "ana": 0.0,
+    "nov": 0.3,
+    "com": -0.8,
+    "pat": 0.4
+   },
+   "cost": 1,
+   "time": 2,
+   "first_step": "Sign up for one shift at a food bank."
+  }
+ ]
+}
